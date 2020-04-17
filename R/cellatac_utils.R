@@ -102,7 +102,7 @@ compute_peakQC <- function(win_seu, cluster_col="seurat_clusters", EnsDb.genome 
   cl_frac <- fracAccessible_cluster(win_seu, assay="peaks", cluster_col)
   max_frac <- rowMaxs(cl_frac)
   names(max_frac) <- rownames(cl_frac)
-  peaks_stats %>% mutate(max_frac = max_frac[peak_id])
+  peaks_stats <- peaks_stats %>% mutate(max_frac = max_frac[peak_id])
   ## Annotations
   gr_peaks <- StringToGRanges(rownames(win_seu), sep=c(":","-"))
   gr_peaks <- annotate_gr(gr_peaks, EnsDb.genome, blacklist_gr)
