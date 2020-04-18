@@ -2,7 +2,7 @@
 % Please edit documentation in R/cellatac_utils.R
 \name{compute_peakQC}
 \alias{compute_peakQC}
-\title{Compute QC metric for peaks}
+\title{Compute QC metric for peaks (see details)}
 \usage{
 compute_peakQC(win_seu, cluster_col = "seurat_clusters",
   EnsDb.genome = EnsDb.Hsapiens.v86, blacklist_gr = blacklist_hg38)
@@ -18,8 +18,25 @@ compute_peakQC(win_seu, cluster_col = "seurat_clusters",
 (default uses blacklist annotation implemented in Signac)}
 }
 \value{
-Seurat object with qc metric stored in `meta.features` of `peaks` assay
+Seurat object with qc metrics stored as \code{meta.features} columns of \code{peaks} assay
 }
 \description{
-Compute QC metric for peaks
+Compute QC metric for peaks (see details)
+}
+\details{
+Calculated metrics are
+\itemize{
+\item tot_count: total count of fragments overlapping peak
+\item tot_cells: total number of cells in which peak is accessible
+\item frac_cells: fraction of cells in which peak is accessible
+\item peak_width: width of peak in bps
+\item exon: is peak overlapping exon?
+\item intron: is peak overlapping intron?
+\item promoter: is peak overlapping promoter?
+\item annotation: annotation of overlapping genomic region (promoter, exon, intron, intergenic)
+\item gene_name: name of overlapping gene (downstream gene for promoter region, NA for intergenic peaks)
+\item gene_id: ENSEMBL id of overlapping gene (downstream gene for promoter region, NA for intergenic peaks)
+\item tss_distance: distance to closest Transcription Start Site in bps
+\item ENCODE_blacklist: is peak overlapping ENCODE blacklist region?
+}
 }

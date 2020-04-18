@@ -68,7 +68,7 @@ load_cellatac_seurat <- function(out.dir){
 
 #### Peaks QC ####
 
-#' Compute QC metric for peaks
+#' Compute QC metric for peaks (see details)
 #'
 #' @param win_seu Seurat object
 #' @param cluster_col column in metadata storing cluster information
@@ -76,7 +76,24 @@ load_cellatac_seurat <- function(out.dir){
 #' @param blacklist_gr GenomicRanges object of ENCODE blacklisted regions for genome of interest
 #' (default uses blacklist annotation implemented in Signac)
 #'
-#' @return Seurat object with qc metric stored in `meta.features` of `peaks` assay
+#' @return Seurat object with qc metrics stored as `meta.features` columns of `peaks` assay
+#'
+#' @details Calculated metrics are
+#' * tot_count: total count of fragments overlapping peak
+#' * tot_cells: total number of cells in which peak is accessible
+#' * frac_cells: fraction of cells in which peak is accessible
+#' * peak_width: width of peak in bps
+#' * exon: is peak overlapping exon?
+#' * intron: is peak overlapping intron?
+#' * promoter: is peak overlapping promoter?
+#' * annotation: annotation of overlapping genomic region (promoter, exon, intron, intergenic)
+#' * gene_name: name of overlapping gene (downstream gene for promoter region, NA for intergenic peaks)
+#' * gene_id: ENSEMBL id of overlapping gene (downstream gene for promoter region, NA for intergenic peaks)
+#' * tss_distance: distance to closest Transcription Start Site in bps
+#' * ENCODE_blacklist: is peak overlapping ENCODE blacklist region?
+#'
+#' @md
+#'
 #'
 #' @import Seurat
 #' @import Signac
@@ -188,7 +205,10 @@ annotate_gr <- function(gr, EnsDb.genome = EnsDb.Hsapiens.v86, blacklist_gr = Si
   gr$gene_id[queryHits(overlap)] <- genespromoters_coords$gene_id[subjectHits(overlap)]
 
   ## Distance to nearest TSS
-  tss_coords <- resize(unlist(range(split(genes_coords, ~ gene_id))), width=1)
+  transcript_coords <- ensembldb::transcripts(EnsDb.genome, filter = ~ gene_biotype == "protein_coding")
+  seqlevelsStyle(transcript_coords) <- 'UCSC'
+  transcript_coords <- keepStandardChromosomes(transcript_coords, pruning.mode = 'coarse')
+  tss_coords <- resize(unlist(range(split(transcript_coords, ~ tx_id))), width=1)
   tss_distance <- distanceToNearest(gr, tss_coords)
   gr$tss_distance <- tss_distance@elementMetadata$distance
 
