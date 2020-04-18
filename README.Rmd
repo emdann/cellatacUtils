@@ -7,7 +7,7 @@ output: github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  cache = TRUE,
+  cache = FALSE,
   message = FALSE,
   warning = FALSE
 )
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 R package for handling [cellatac pipeline](https://github.com/cellgeni/cellatac) output 
 
 ## Installation
-```{r}
+```{r, eval=FALSE, echo=TRUE}
 devtools::install_github("emdann/cellatacUtils")
 ```
 
