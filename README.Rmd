@@ -49,7 +49,7 @@ cellatac.seu <- compute_peakQC(cellatac.seu,
                                blacklist_gr = blacklist_hg38)
 ```
 
-Calculated QC metrics:
+Calculated peak QC metrics:
 
 * tot_count: total count of fragments overlapping peak
 * tot_cells: total number of cells in which peak is accessible
